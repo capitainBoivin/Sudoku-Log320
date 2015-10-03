@@ -6,5 +6,5 @@ import java.util.List;
  */
 public class Colonne {
 
-    public List<Integer> chiffre = new ArrayList<Integer>();
+    public ArrayList<Integer> chiffre = new ArrayList<Integer>();
 }

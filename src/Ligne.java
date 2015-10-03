@@ -1,3 +1,4 @@
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -6,5 +7,5 @@ import java.util.List;
  */
 public class Ligne {
 
-    public List<Integer> chiffre = new ArrayList<Integer>();
+    public ArrayList<Integer> chiffre = new ArrayList<Integer>();
 }

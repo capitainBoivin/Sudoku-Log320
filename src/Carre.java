@@ -5,6 +5,6 @@ import java.util.ArrayList;
  */
 public class Carre {
 
-    private ArrayList<Integer> chiffre = new ArrayList<Integer>();
+    public ArrayList<Integer> chiffre = new ArrayList<Integer>();
 
 }

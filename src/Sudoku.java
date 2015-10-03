@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.lang.reflect.Array;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -10,7 +11,12 @@ import java.util.Scanner;
 public class Sudoku {
 
     private Integer [][]jeu=new Integer [9][9];
+    private Ligne[] listeLigne=new Ligne[9];
+    private Colonne[] listeColonne=new Colonne[9];
+    private Carre[] listeCarre=new Carre[9];
+    private boolean resolu=false;
 
+    //Creer le jeu en assignant les valeurs pour les lignes et colonnes
     public void creerJeu(Integer [][] jeu)
     {
         int noDeLigne =0;
@@ -19,26 +25,202 @@ public class Sudoku {
         for (noDeLigne=0; noDeLigne<9; noDeLigne++) {
             Ligne ligne = new Ligne();
             for (noDeColonne=0; noDeColonne<9;noDeColonne++) {
-                ligne.chiffre.add(noDeLigne, jeu[noDeLigne][noDeColonne]);
+                ligne.chiffre.add(jeu[noDeLigne][noDeColonne]);
             }
+            this.listeLigne[noDeLigne]=ligne;
         }
-        noDeColonne=0;
-        noDeLigne=0;
+
         //Construction des colonnes, je pense
         for (noDeColonne=0; noDeColonne<9; noDeColonne++) {
             Colonne colonne = new Colonne();
             for (noDeLigne=0; noDeLigne<9;noDeLigne++) {
-                colonne.chiffre.add(noDeColonne, jeu[noDeLigne][noDeColonne]);
+                colonne.chiffre.add(jeu[noDeLigne][noDeColonne]);
             }
+            this.listeColonne[noDeColonne]=colonne;
         }
+
+        //Construction carre, elle pense
+        //construireCarre(0,0,0);
+
     }
 
+    public boolean jouer(int ligne,int colonne)
+    {
+        for (int num=1;num<=9;num++)
+        {
+            if(estLibre(num,ligne,colonne))
+            {
+                jeu[ligne][colonne]=num;
+                if (resolu)
+                {
+                    return true;
+                }
+                jeu[ligne][colonne]=null;
+            }
+
+        }
+        return false;
+    }
+
+    public void construireCarre(int debut,int fin, int index)
+    {
+
+        Carre carre=new Carre();
+        for (int i=debut; i<debut+3; i++) {
+            for (int j=fin; j<fin+3; j++) {
+                carre.chiffre.add(jeu[i][j]);
+            }
+            this.listeCarre[index]=carre;
+            construireCarre(3,0,index+1);
+        }
+        index+=1;
+    }
+
+
+    //Verifie si la case es libre
+    public boolean estLibre(int ligne,int colonne,int carre)
+    {
+        boolean ligneLibre=true;
+        boolean colonneLibre=true;
+        boolean carreLibre=true;
+
+        switch (colonne)
+        {
+            case 1:
+                if (listeColonne[1].chiffre.contains(colonne))
+                    {
+                        colonneLibre=false;
+                    }
+                break;
+            case 2:
+                if (listeColonne[2].chiffre.contains(colonne))
+                    {
+                        colonneLibre=false;
+                    }
+
+                break;
+            case 3:
+                if (listeColonne[1].chiffre.contains(colonne))
+                    {
+                        colonneLibre=false;
+                    }
+                break;
+            case 4:
+                if (listeColonne[1].chiffre.contains(colonne))
+                    {
+                        colonneLibre=false;
+                    }
+                break;
+            case 5:
+                if (listeColonne[1].chiffre.contains(colonne))
+                    {
+                        colonneLibre=false;
+                    }
+                break;
+            case 6:
+                if (listeColonne[1].chiffre.contains(colonne))
+                    {
+                        colonneLibre=false;
+                    }
+                break;
+            case 7:
+                if (listeColonne[1].chiffre.contains(colonne))
+                    {
+                        colonneLibre=false;
+                    }
+                break;
+            case 8:
+                if (listeColonne[1].chiffre.contains(colonne))
+                    {
+                        colonneLibre=false;
+                    }
+                break;
+            case 9:
+                if (listeColonne[1].chiffre.contains(colonne))
+                {
+                    colonneLibre=false;
+                }
+                break;
+        }
+
+        switch (ligne)
+        {
+            case 1:
+                if (listeLigne[1].chiffre.contains(ligne))
+                {
+                    ligneLibre=false;
+                }
+                break;
+            case 2:
+                if (listeLigne[2].chiffre.contains(ligne))
+                {
+                    ligneLibre=false;
+                }
+
+                break;
+            case 3:
+                if (listeLigne[1].chiffre.contains(ligne))
+                {
+                    ligneLibre=false;
+                }
+                break;
+            case 4:
+                if (listeLigne[1].chiffre.contains(ligne))
+                {
+                    ligneLibre=false;
+                }
+                break;
+            case 5:
+                if (listeLigne[1].chiffre.contains(ligne))
+                {
+                    ligneLibre=false;
+                }
+                break;
+            case 6:
+                if (listeLigne[1].chiffre.contains(ligne))
+                {
+                    ligneLibre=false;
+                }
+                break;
+            case 7:
+                if (listeLigne[1].chiffre.contains(ligne))
+                {
+                    ligneLibre=false;
+                }
+                break;
+            case 8:
+                if (listeLigne[1].chiffre.contains(ligne))
+                {
+                    ligneLibre=false;
+                }
+                break;
+            case 9:
+                if (listeLigne[1].chiffre.contains(ligne))
+                {
+                    ligneLibre=false;
+                }
+                break;
+        }
+
+        if (ligneLibre && colonneLibre && carreLibre)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+
+    }
+
+    //Cette fonction permet de lire le fichier avant la creation du jeu
     public void lireFichier(File f)
     {
         String ligne;
         int noDeLigne = 0;
         //Lire le fichier
-        try (BufferedReader br = new BufferedReader(new FileReader(f))) {
+        try  {
+            BufferedReader br = new BufferedReader(new FileReader(f));
             //Pour chaque ligne on lit la ligne et remplit chaque colonne avec les caracteres, on augmente ensuite noDeLigne pour remplir la ligne suivante
             while ((ligne = br.readLine()) != null) {
                 int i=0;
@@ -54,6 +236,19 @@ public class Sudoku {
             System.out.println(e.getMessage());
         }
     }
+
+
+    public void voirJeu()
+    {
+
+        for(int i = 0; i < 9; i++) {
+            System.out.println("ligne"+i);
+            for(int j = 0; j < 9; j++) {
+                System.out.println(this.jeu[i][j]);
+            }
+        }
+    }
+
 
 
     public static void main(String[] args) {
