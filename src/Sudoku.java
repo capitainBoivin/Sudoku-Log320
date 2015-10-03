@@ -13,7 +13,24 @@ public class Sudoku {
 
     public void creerJeu(Integer [][] jeu)
     {
-
+        int noDeLigne =0;
+        int noDeColonne=0;
+        //Construction des lignes, je pense
+        for (noDeLigne=0; noDeLigne<9; noDeLigne++) {
+            Ligne ligne = new Ligne();
+            for (noDeColonne=0; noDeColonne<9;noDeColonne++) {
+                ligne.chiffre.add(noDeLigne, jeu[noDeLigne][noDeColonne]);
+            }
+        }
+        noDeColonne=0;
+        noDeLigne=0;
+        //Construction des colonnes, je pense
+        for (noDeColonne=0; noDeColonne<9; noDeColonne++) {
+            Colonne colonne = new Colonne();
+            for (noDeLigne=0; noDeLigne<9;noDeLigne++) {
+                colonne.chiffre.add(noDeColonne, jeu[noDeLigne][noDeColonne]);
+            }
+        }
     }
 
     public void lireFichier(File f)
