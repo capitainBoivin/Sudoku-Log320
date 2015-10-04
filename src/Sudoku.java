@@ -39,9 +39,16 @@ public class Sudoku {
             this.listeColonne[noDeColonne]=colonne;
         }
 
-        //Construction carre, elle pense
-        //construireCarre(0,0,0);
-
+        //Construction carre, elle pense (haha tres tres  drole marc andre majeau
+        construireCarre(0,0,0);
+        construireCarre(0,3,1);
+        construireCarre(0,6,2);
+        construireCarre(3,0,3);
+        construireCarre(3,3,4);
+        construireCarre(3,6,5);
+        construireCarre(6,0,6);
+        construireCarre(6,3,7);
+        construireCarre(6,6,9);
     }
 
     public boolean jouer(int ligne,int colonne)
@@ -62,18 +69,17 @@ public class Sudoku {
         return false;
     }
 
-    public void construireCarre(int debut,int fin, int index)
+    public void construireCarre(int ligne,int colonne, int index)
     {
 
         Carre carre=new Carre();
-        for (int i=debut; i<debut+3; i++) {
-            for (int j=fin; j<fin+3; j++) {
+        for (int i=ligne; i<ligne+3; i++) {
+            for (int j=colonne; j<colonne+3; j++) {
                 carre.chiffre.add(jeu[i][j]);
             }
             this.listeCarre[index]=carre;
             construireCarre(3,0,index+1);
         }
-        index+=1;
     }
 
 
