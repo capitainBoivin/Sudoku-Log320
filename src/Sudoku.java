@@ -54,16 +54,16 @@ public class Sudoku {
         for (int num = 1; num <= 9; num++) {
             if (estLibre(num, ligne, colonne)) {
                 jeu[ligne][colonne] = num;
-                if (resolu) {
+                if (jouer(ligne+1,colonne+1)) {
                     return true;
                 }
                 jeu[ligne][colonne] = null;
             }
-
         }
         return false;
     }
 
+    //Remplir les sections avec les numeros contenu dans la section
     public void construireCarre(int ligne, int colonne, int index) {
 
         Carre carre = new Carre();
