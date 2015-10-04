@@ -10,203 +10,224 @@ import java.util.Scanner;
  */
 public class Sudoku {
 
-    private Integer [][]jeu=new Integer [9][9];
-    private Ligne[] listeLigne=new Ligne[9];
-    private Colonne[] listeColonne=new Colonne[9];
-    private Carre[] listeCarre=new Carre[9];
-    private boolean resolu=false;
+    private Integer[][] jeu = new Integer[9][9];
+    private Ligne[] listeLigne = new Ligne[9];
+    private Colonne[] listeColonne = new Colonne[9];
+    private Carre[] listeCarre = new Carre[9];
+    private boolean resolu = false;
 
     //Creer le jeu en assignant les valeurs pour les lignes et colonnes
-    public void creerJeu(Integer [][] jeu)
-    {
-        int noDeLigne =0;
-        int noDeColonne=0;
+    public void creerJeu(Integer[][] jeu) {
+        int noDeLigne = 0;
+        int noDeColonne = 0;
         //Construction des lignes, je pense
-        for (noDeLigne=0; noDeLigne<9; noDeLigne++) {
+        for (noDeLigne = 0; noDeLigne < 9; noDeLigne++) {
             Ligne ligne = new Ligne();
-            for (noDeColonne=0; noDeColonne<9;noDeColonne++) {
+            for (noDeColonne = 0; noDeColonne < 9; noDeColonne++) {
                 ligne.chiffre.add(jeu[noDeLigne][noDeColonne]);
             }
-            this.listeLigne[noDeLigne]=ligne;
+            this.listeLigne[noDeLigne] = ligne;
         }
 
         //Construction des colonnes, je pense
-        for (noDeColonne=0; noDeColonne<9; noDeColonne++) {
+        for (noDeColonne = 0; noDeColonne < 9; noDeColonne++) {
             Colonne colonne = new Colonne();
-            for (noDeLigne=0; noDeLigne<9;noDeLigne++) {
+            for (noDeLigne = 0; noDeLigne < 9; noDeLigne++) {
                 colonne.chiffre.add(jeu[noDeLigne][noDeColonne]);
             }
-            this.listeColonne[noDeColonne]=colonne;
+            this.listeColonne[noDeColonne] = colonne;
         }
 
         //Construction carre, elle pense (haha tres tres  drole marc andre majeau
-        construireCarre(0,0,0);
-        construireCarre(0,3,1);
-        construireCarre(0,6,2);
-        construireCarre(3,0,3);
-        construireCarre(3,3,4);
-        construireCarre(3,6,5);
-        construireCarre(6,0,6);
-        construireCarre(6,3,7);
-        construireCarre(6,6,9);
+        construireCarre(0, 0, 0);
+        construireCarre(0, 3, 1);
+        construireCarre(0, 6, 2);
+        construireCarre(3, 0, 3);
+        construireCarre(3, 3, 4);
+        construireCarre(3, 6, 5);
+        construireCarre(6, 0, 6);
+        construireCarre(6, 3, 7);
+        construireCarre(6, 6, 9);
     }
 
-    public boolean jouer(int ligne,int colonne)
-    {
-        for (int num=1;num<=9;num++)
-        {
-            if(estLibre(num,ligne,colonne))
-            {
-                jeu[ligne][colonne]=num;
-                if (resolu)
-                {
+    public boolean jouer(int ligne, int colonne) {
+        for (int num = 1; num <= 9; num++) {
+            if (estLibre(num, ligne, colonne)) {
+                jeu[ligne][colonne] = num;
+                if (resolu) {
                     return true;
                 }
-                jeu[ligne][colonne]=null;
+                jeu[ligne][colonne] = null;
             }
 
         }
         return false;
     }
 
-    public void construireCarre(int ligne,int colonne, int index)
-    {
+    public void construireCarre(int ligne, int colonne, int index) {
 
-        Carre carre=new Carre();
-        for (int i=ligne; i<ligne+3; i++) {
-            for (int j=colonne; j<colonne+3; j++) {
+        Carre carre = new Carre();
+        for (int i = ligne; i < ligne + 3; i++) {
+            for (int j = colonne; j < colonne + 3; j++) {
                 carre.chiffre.add(jeu[i][j]);
             }
-            this.listeCarre[index]=carre;
-            construireCarre(3,0,index+1);
+            this.listeCarre[index] = carre;
+            construireCarre(3, 0, index + 1);
         }
     }
 
 
     //Verifie si la case es libre
-    public boolean estLibre(int ligne,int colonne,int carre)
-    {
-        boolean ligneLibre=true;
-        boolean colonneLibre=true;
-        boolean carreLibre=true;
+    public boolean estLibre(int ligne, int colonne, int carre) {
+        boolean ligneLibre = true;
+        boolean colonneLibre = true;
+        boolean carreLibre = true;
 
-        switch (colonne)
-        {
+        switch (colonne) {
             case 1:
-                if (listeColonne[1].chiffre.contains(colonne))
-                    {
-                        colonneLibre=false;
-                    }
-                break;
-            case 2:
-                if (listeColonne[2].chiffre.contains(colonne))
-                    {
-                        colonneLibre=false;
-                    }
-
-                break;
-            case 3:
-                if (listeColonne[1].chiffre.contains(colonne))
-                    {
-                        colonneLibre=false;
-                    }
-                break;
-            case 4:
-                if (listeColonne[1].chiffre.contains(colonne))
-                    {
-                        colonneLibre=false;
-                    }
-                break;
-            case 5:
-                if (listeColonne[1].chiffre.contains(colonne))
-                    {
-                        colonneLibre=false;
-                    }
-                break;
-            case 6:
-                if (listeColonne[1].chiffre.contains(colonne))
-                    {
-                        colonneLibre=false;
-                    }
-                break;
-            case 7:
-                if (listeColonne[1].chiffre.contains(colonne))
-                    {
-                        colonneLibre=false;
-                    }
-                break;
-            case 8:
-                if (listeColonne[1].chiffre.contains(colonne))
-                    {
-                        colonneLibre=false;
-                    }
-                break;
-            case 9:
-                if (listeColonne[1].chiffre.contains(colonne))
-                {
-                    colonneLibre=false;
-                }
-                break;
-        }
-
-        switch (ligne)
-        {
-            case 1:
-                if (listeLigne[1].chiffre.contains(ligne))
-                {
-                    ligneLibre=false;
+                if (listeColonne[1].chiffre.contains(colonne)) {
+                    colonneLibre = false;
                 }
                 break;
             case 2:
-                if (listeLigne[2].chiffre.contains(ligne))
-                {
-                    ligneLibre=false;
+                if (listeColonne[2].chiffre.contains(colonne)) {
+                    colonneLibre = false;
                 }
 
                 break;
             case 3:
-                if (listeLigne[1].chiffre.contains(ligne))
-                {
-                    ligneLibre=false;
+                if (listeColonne[3].chiffre.contains(colonne)) {
+                    colonneLibre = false;
                 }
                 break;
             case 4:
-                if (listeLigne[1].chiffre.contains(ligne))
-                {
-                    ligneLibre=false;
+                if (listeColonne[4].chiffre.contains(colonne)) {
+                    colonneLibre = false;
                 }
                 break;
             case 5:
-                if (listeLigne[1].chiffre.contains(ligne))
-                {
-                    ligneLibre=false;
+                if (listeColonne[5].chiffre.contains(colonne)) {
+                    colonneLibre = false;
                 }
                 break;
             case 6:
-                if (listeLigne[1].chiffre.contains(ligne))
-                {
-                    ligneLibre=false;
+                if (listeColonne[6].chiffre.contains(colonne)) {
+                    colonneLibre = false;
                 }
                 break;
             case 7:
-                if (listeLigne[1].chiffre.contains(ligne))
-                {
-                    ligneLibre=false;
+                if (listeColonne[7].chiffre.contains(colonne)) {
+                    colonneLibre = false;
                 }
                 break;
             case 8:
-                if (listeLigne[1].chiffre.contains(ligne))
-                {
-                    ligneLibre=false;
+                if (listeColonne[8].chiffre.contains(colonne)) {
+                    colonneLibre = false;
                 }
                 break;
             case 9:
-                if (listeLigne[1].chiffre.contains(ligne))
-                {
-                    ligneLibre=false;
+                if (listeColonne[9].chiffre.contains(colonne)) {
+                    colonneLibre = false;
                 }
                 break;
         }
+        switch (ligne) {
+            case 1:
+                if (listeLigne[1].chiffre.contains(ligne)) {
+                    ligneLibre = false;
+                }
+                break;
+            case 2:
+                if (listeLigne[2].chiffre.contains(ligne)) {
+                    ligneLibre = false;
+                }
+
+                break;
+            case 3:
+                if (listeLigne[3].chiffre.contains(ligne)) {
+                    ligneLibre = false;
+                }
+                break;
+            case 4:
+                if (listeLigne[4].chiffre.contains(ligne)) {
+                    ligneLibre = false;
+                }
+                break;
+            case 5:
+                if (listeLigne[5].chiffre.contains(ligne)) {
+                    ligneLibre = false;
+                }
+                break;
+            case 6:
+                if (listeLigne[6].chiffre.contains(ligne)) {
+                    ligneLibre = false;
+                }
+                break;
+            case 7:
+                if (listeLigne[7].chiffre.contains(ligne)) {
+                    ligneLibre = false;
+                }
+                break;
+            case 8:
+                if (listeLigne[8].chiffre.contains(ligne)) {
+                    ligneLibre = false;
+                }
+                break;
+            case 9:
+                if (listeLigne[9].chiffre.contains(ligne)) {
+                    ligneLibre = false;
+                }
+                break;
+        }
+        switch (carre) {
+            case 1:
+                if (listeCarre[1].chiffre.contains(carre)) {
+                    carreLibre = false;
+                }
+                break;
+            case 2:
+                if (listeCarre[2].chiffre.contains(carre)) {
+                    carreLibre = false;
+                }
+
+                break;
+            case 3:
+                if (listeCarre[3].chiffre.contains(carre)) {
+                    carreLibre = false;
+                }
+                break;
+            case 4:
+                if (listeCarre[4].chiffre.contains(carre)) {
+                    carreLibre = false;
+                }
+                break;
+            case 5:
+                if (listeCarre[5].chiffre.contains(carre)) {
+                    carreLibre = false;
+                }
+                break;
+            case 6:
+                if (listeCarre[6].chiffre.contains(carre)) {
+                    carreLibre = false;
+                }
+                break;
+            case 7:
+                if (listeCarre[7].chiffre.contains(carre)) {
+                    carreLibre = false;
+                }
+                break;
+            case 8:
+                if (listeCarre[8].chiffre.contains(carre)) {
+                    carreLibre = false;
+                }
+                break;
+            case 9:
+                if (listeCarre[9].chiffre.contains(carre)) {
+                    carreLibre = false;
+                }
+                break;
+        }
+
 
         if (ligneLibre && colonneLibre && carreLibre)
         {
