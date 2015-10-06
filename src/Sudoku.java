@@ -10,10 +10,11 @@ import java.util.Scanner;
  */
 public class Sudoku {
 
-    private Integer[][] jeu = new Integer[9][9];
+    protected Integer[][] jeu = new Integer[9][9];
     private Ligne[] listeLigne = new Ligne[9];
     private Colonne[] listeColonne = new Colonne[9];
     private Carre[] listeCarre = new Carre[9];
+    private Integer[] numerosTab = {1,2,3,4,5,6,7,8,9};
     private boolean resolu = false;
 
     //Creer le jeu en assignant les valeurs pour les lignes et colonnes
@@ -47,9 +48,23 @@ public class Sudoku {
         construireCarre(3, 6, 5);
         construireCarre(6, 0, 6);
         construireCarre(6, 3, 7);
-        construireCarre(6, 6, 9);
+        construireCarre(6, 6, 8);
     }
 
+    //Remplir les sections avec les numeros contenu dans la section
+    public void construireCarre(int ligne, int colonne, int index) {
+
+        Carre carre = new Carre();
+        for (int i = ligne; i < ligne + 3; i++) {
+            for (int j = colonne; j < colonne + 3; j++) {
+                carre.chiffre.add(jeu[i][j]);
+            }
+        }
+        this.listeCarre[index] = carre;
+    }
+    //==============================================================================================================
+    //------------------------------------------------------JEU-----------------------------------------------------
+    //==============================================================================================================
     public boolean jouer(int ligne, int colonne) {
         for (int num = 1; num <= 9; num++) {
             if (estLibre(num, ligne, colonne)) {
@@ -63,20 +78,92 @@ public class Sudoku {
         return false;
     }
 
-    //Remplir les sections avec les numeros contenu dans la section
-    public void construireCarre(int ligne, int colonne, int index) {
-
-        Carre carre = new Carre();
-        for (int i = ligne; i < ligne + 3; i++) {
-            for (int j = colonne; j < colonne + 3; j++) {
-                carre.chiffre.add(jeu[i][j]);
+    public boolean jouerV2() {
+        int indexNumTab =0;
+        boolean valide = true;
+        //Si le jeu est resolu ou on as tous essaye les numeros dla table
+        if(resolu == true || indexNumTab >= 9){
+            return true;
+        }
+        //Parcour des lignes
+        for(int i=0; i<9; i++){
+            //Parcour des colonnes
+            for (int j=0; j<9; j++){
+                if (jeu[i][j] == 0){
+                    while (resolu == false && indexNumTab < 9) {
+                        if (estLibre2(i, j, getCarre(i, j), numerosTab[indexNumTab])) {
+                            jeu[i][j] = numerosTab[indexNumTab];
+                            System.out.println("Ligne " + i + " Colonne " + j + " Num " + numerosTab[indexNumTab]);
+                            valide = jouerV2();
+                            //Si on trouve pas de solutions avec la valeur mise en place, on remet la valeur a zero et on reesaye avec d"autre
+                            if (valide == false){
+                                jeu[i][j] = 0;
+                            }
+                            else {
+                                break;
+                            }
+                        }
+                        else {
+                            indexNumTab ++;
+                        }
+                    }
+                }
             }
-            this.listeCarre[index] = carre;
-            construireCarre(3, 0, index + 1);
+        }
+        if (indexNumTab >= 9) {
+            return false;
+        }
+        else {
+            return true;
         }
     }
 
+    public int getCarre(int ligne, int colonne){
+        int indexCarre = 10;
+        if (ligne < 3 && colonne < 3){
+            indexCarre = 0;
+        }
+        else if (ligne < 3 && colonne < 6){
+            indexCarre = 1;
+        }
+        else if (ligne < 3 && colonne < 9){
+            indexCarre = 2;
+        }
+        else if (ligne < 6 && colonne < 3){
+            indexCarre = 3;
+        }
+        else if (ligne < 6 && colonne < 6){
+            indexCarre = 4;
+        }
+        else if (ligne < 6 && colonne < 9){
+            indexCarre = 5;
+        }
+        else if (ligne < 9 && colonne < 3){
+            indexCarre = 6;
+        }
+        else if (ligne < 9 && colonne < 6){
+            indexCarre = 7;
+        }
+        else if (ligne < 9 && colonne < 9){
+            indexCarre = 8;
+        }
+        return indexCarre;
+    }
 
+    //Verifie si la case es libre
+    public boolean estLibre2(int ligne, int colonne, int carre,int num) {
+        boolean libre = true;
+        if (listeColonne[colonne].chiffre.contains(num)){
+           libre = false;
+        }
+        if (listeLigne[ligne].chiffre.contains(num)){
+            libre = false;
+        }
+        if (listeCarre[carre].chiffre.contains(num)){
+            libre = false;
+        }
+        return libre;
+    }
     //Verifie si la case es libre
     public boolean estLibre(int ligne, int colonne, int carre) {
         boolean ligneLibre = true;
@@ -260,7 +347,7 @@ public class Sudoku {
             this.creerJeu(jeu);
         }
         catch (Exception e){
-            System.out.println(e.getMessage());
+            //System.out.println(e.getMessage());
         }
     }
 
@@ -287,6 +374,13 @@ public class Sudoku {
         File file = new File(path);
         //On appelle la methode lireFichier qui sert a remplir le array de jeu
         sudoku.lireFichier(file);
-
+        //On appelle la methode pour resoudre le sudoku
+        boolean resolution = sudoku.jouerV2();
+        if(resolution == true){
+            System.out.println("Le sudoku est resolu");
+        }
+        else {
+            System.out.println("Le sudoku na pas de solution");
+        }
     }
 }
