@@ -1,8 +1,7 @@
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.lang.reflect.Array;
-import java.util.List;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -65,21 +64,10 @@ public class Sudoku {
     //==============================================================================================================
     //------------------------------------------------------JEU-----------------------------------------------------
     //==============================================================================================================
-    public boolean jouer(int ligne, int colonne) {
-        for (int num = 1; num <= 9; num++) {
-            if (estLibre(num, ligne, colonne)) {
-                jeu[ligne][colonne] = num;
-                if (jouer(ligne+1,colonne+1)) {
-                    return true;
-                }
-                jeu[ligne][colonne] = null;
-            }
-        }
-        return false;
-    }
 
-    public boolean jouerV2() {
+    public boolean jouer() {
         int indexNumTab =0;
+        ArrayList<Integer> usedIndex = new ArrayList<>();
         boolean valide = true;
         //Si le jeu est resolu ou on as tous essaye les numeros dla table
         if(resolu == true || indexNumTab >= 9){
@@ -91,13 +79,20 @@ public class Sudoku {
             for (int j=0; j<9; j++){
                 if (jeu[i][j] == 0){
                     while (resolu == false && indexNumTab < 9) {
-                        if (estLibre2(i, j, getCarre(i, j), numerosTab[indexNumTab])) {
+                        if (estLibre(i, j, getCarre(i, j), numerosTab[indexNumTab]) && !usedIndex.contains(indexNumTab)) {
                             jeu[i][j] = numerosTab[indexNumTab];
-                            System.out.println("Ligne " + i + " Colonne " + j + " Num " + numerosTab[indexNumTab]);
-                            valide = jouerV2();
+                            listeLigne[i].chiffre.add(numerosTab[indexNumTab]);
+                            listeColonne[j].chiffre.add(numerosTab[indexNumTab]);
+                            int indexCarre = getCarre(i,j);
+                            listeCarre[indexCarre].chiffre.add(numerosTab[indexNumTab]);
+                            usedIndex.add(indexNumTab);
+                            valide = jouer();
                             //Si on trouve pas de solutions avec la valeur mise en place, on remet la valeur a zero et on reesaye avec d"autre
                             if (valide == false){
                                 jeu[i][j] = 0;
+                                listeLigne[i].chiffre.remove(numerosTab[indexNumTab]);
+                                listeColonne[j].chiffre.remove(numerosTab[indexNumTab]);
+                                listeCarre[indexCarre].chiffre.remove(numerosTab[indexNumTab]);
                             }
                             else {
                                 break;
@@ -106,6 +101,9 @@ public class Sudoku {
                         else {
                             indexNumTab ++;
                         }
+                    }
+                    if (indexNumTab >= 9) {
+                        return false;
                     }
                 }
             }
@@ -151,7 +149,7 @@ public class Sudoku {
     }
 
     //Verifie si la case es libre
-    public boolean estLibre2(int ligne, int colonne, int carre,int num) {
+    public boolean estLibre(int ligne, int colonne, int carre,int num) {
         boolean libre = true;
         if (listeColonne[colonne].chiffre.contains(num)){
            libre = false;
@@ -163,168 +161,6 @@ public class Sudoku {
             libre = false;
         }
         return libre;
-    }
-    //Verifie si la case es libre
-    public boolean estLibre(int ligne, int colonne, int carre) {
-        boolean ligneLibre = true;
-        boolean colonneLibre = true;
-        boolean carreLibre = true;
-
-        switch (colonne) {
-            case 1:
-                if (listeColonne[1].chiffre.contains(colonne)) {
-                    colonneLibre = false;
-                }
-                break;
-            case 2:
-                if (listeColonne[2].chiffre.contains(colonne)) {
-                    colonneLibre = false;
-                }
-
-                break;
-            case 3:
-                if (listeColonne[3].chiffre.contains(colonne)) {
-                    colonneLibre = false;
-                }
-                break;
-            case 4:
-                if (listeColonne[4].chiffre.contains(colonne)) {
-                    colonneLibre = false;
-                }
-                break;
-            case 5:
-                if (listeColonne[5].chiffre.contains(colonne)) {
-                    colonneLibre = false;
-                }
-                break;
-            case 6:
-                if (listeColonne[6].chiffre.contains(colonne)) {
-                    colonneLibre = false;
-                }
-                break;
-            case 7:
-                if (listeColonne[7].chiffre.contains(colonne)) {
-                    colonneLibre = false;
-                }
-                break;
-            case 8:
-                if (listeColonne[8].chiffre.contains(colonne)) {
-                    colonneLibre = false;
-                }
-                break;
-            case 9:
-                if (listeColonne[9].chiffre.contains(colonne)) {
-                    colonneLibre = false;
-                }
-                break;
-        }
-        switch (ligne) {
-            case 1:
-                if (listeLigne[1].chiffre.contains(ligne)) {
-                    ligneLibre = false;
-                }
-                break;
-            case 2:
-                if (listeLigne[2].chiffre.contains(ligne)) {
-                    ligneLibre = false;
-                }
-
-                break;
-            case 3:
-                if (listeLigne[3].chiffre.contains(ligne)) {
-                    ligneLibre = false;
-                }
-                break;
-            case 4:
-                if (listeLigne[4].chiffre.contains(ligne)) {
-                    ligneLibre = false;
-                }
-                break;
-            case 5:
-                if (listeLigne[5].chiffre.contains(ligne)) {
-                    ligneLibre = false;
-                }
-                break;
-            case 6:
-                if (listeLigne[6].chiffre.contains(ligne)) {
-                    ligneLibre = false;
-                }
-                break;
-            case 7:
-                if (listeLigne[7].chiffre.contains(ligne)) {
-                    ligneLibre = false;
-                }
-                break;
-            case 8:
-                if (listeLigne[8].chiffre.contains(ligne)) {
-                    ligneLibre = false;
-                }
-                break;
-            case 9:
-                if (listeLigne[9].chiffre.contains(ligne)) {
-                    ligneLibre = false;
-                }
-                break;
-        }
-        switch (carre) {
-            case 1:
-                if (listeCarre[1].chiffre.contains(carre)) {
-                    carreLibre = false;
-                }
-                break;
-            case 2:
-                if (listeCarre[2].chiffre.contains(carre)) {
-                    carreLibre = false;
-                }
-
-                break;
-            case 3:
-                if (listeCarre[3].chiffre.contains(carre)) {
-                    carreLibre = false;
-                }
-                break;
-            case 4:
-                if (listeCarre[4].chiffre.contains(carre)) {
-                    carreLibre = false;
-                }
-                break;
-            case 5:
-                if (listeCarre[5].chiffre.contains(carre)) {
-                    carreLibre = false;
-                }
-                break;
-            case 6:
-                if (listeCarre[6].chiffre.contains(carre)) {
-                    carreLibre = false;
-                }
-                break;
-            case 7:
-                if (listeCarre[7].chiffre.contains(carre)) {
-                    carreLibre = false;
-                }
-                break;
-            case 8:
-                if (listeCarre[8].chiffre.contains(carre)) {
-                    carreLibre = false;
-                }
-                break;
-            case 9:
-                if (listeCarre[9].chiffre.contains(carre)) {
-                    carreLibre = false;
-                }
-                break;
-        }
-
-
-        if (ligneLibre && colonneLibre && carreLibre)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-
     }
 
     //Cette fonction permet de lire le fichier avant la creation du jeu
@@ -375,9 +211,12 @@ public class Sudoku {
         //On appelle la methode lireFichier qui sert a remplir le array de jeu
         sudoku.lireFichier(file);
         //On appelle la methode pour resoudre le sudoku
-        boolean resolution = sudoku.jouerV2();
+        long startTime = System.currentTimeMillis();
+        boolean resolution = sudoku.jouer();
+        long stopTime = System.currentTimeMillis();
+        long time = stopTime-startTime;
         if(resolution == true){
-            System.out.println("Le sudoku est resolu");
+            System.out.println("Le sudoku est resolu en " + time + " ms");
         }
         else {
             System.out.println("Le sudoku na pas de solution");
