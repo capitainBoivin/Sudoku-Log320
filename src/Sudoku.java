@@ -217,6 +217,7 @@ public class Sudoku {
         }
         else {
             System.out.println("Le sudoku na pas de solution");
+            System.out.println("Le sudoku est resolu en " + (time/1000.0) % 100 + "s");
         }
     }
 }
