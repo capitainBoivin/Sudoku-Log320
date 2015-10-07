@@ -10,8 +10,6 @@ import java.util.Scanner;
 public class Sudoku {
 
     protected Integer[][] jeu = new Integer[9][9];
-    private Ligne[] listeLigne = new Ligne[9];
-    private Colonne[] listeColonne = new Colonne[9];
     private Carre[] listeCarre = new Carre[9];
     private Integer[] numerosTab = {1,2,3,4,5,6,7,8,9};
     private boolean resolu = false;
@@ -40,8 +38,6 @@ public class Sudoku {
                     while (resolu == false && indexNumTab < 9) {
                         if (estLibre(i, j, getCarre(i, j), numerosTab[indexNumTab]) && !usedIndex.contains(indexNumTab)) {
                             jeu[i][j] = numerosTab[indexNumTab];
-                            listeLigne[i].chiffre.add(numerosTab[indexNumTab]);
-                            listeColonne[j].chiffre.add(numerosTab[indexNumTab]);
                             int indexCarre = getCarre(i,j);
                             listeCarre[indexCarre].chiffre.add(numerosTab[indexNumTab]);
                             usedIndex.add(indexNumTab);
@@ -49,8 +45,6 @@ public class Sudoku {
                             //Si on trouve pas de solutions avec la valeur mise en place, on remet la valeur a zero et on reesaye avec d"autre
                             if (valide == false){
                                 jeu[i][j] = 0;
-                                listeLigne[i].chiffre.remove(numerosTab[indexNumTab]);
-                                listeColonne[j].chiffre.remove(numerosTab[indexNumTab]);
                                 listeCarre[indexCarre].chiffre.remove(numerosTab[indexNumTab]);
                             }
                             else {
@@ -111,11 +105,15 @@ public class Sudoku {
     //Verifie si la case es libre
     public boolean estLibre(int ligne, int colonne, int carre,int num) {
         boolean libre = true;
-        if (listeColonne[colonne].chiffre.contains(num)){
-            libre = false;
+        for (int i=0; i<9; i++){
+            if (jeu[ligne][i] == num){
+                libre = false;
+            }
         }
-        if (listeLigne[ligne].chiffre.contains(num)){
-            libre = false;
+        for (int i=0; i<9; i++){
+            if (jeu[i][colonne] == num){
+                libre = false;
+            }
         }
         if (listeCarre[carre].chiffre.contains(num)){
             libre = false;
@@ -128,8 +126,6 @@ public class Sudoku {
     {
         for (int i=0; i<9;i++)
         {
-            this.listeLigne[i]=new Ligne();
-            this.listeColonne[i]=new Colonne();
             this.listeCarre[i]=new Carre();
         }
 
@@ -152,9 +148,6 @@ public class Sudoku {
                     jeu[noDeLigne][i] = Character.getNumericValue(no);
 
                     //Ajout marc...ajout des chiffres dans les ligne
-                    listeLigne[noDeLigne].chiffre.add(Character.getNumericValue(no));
-                    listeColonne[i].chiffre.add(Character.getNumericValue(no));
-
                     if(noDeLigne>=3 && noDeLigne<6)
                     {
                         indexCarre=3;
