@@ -21,7 +21,7 @@ public class Sudoku {
     //==============================================================================================================
 
     //Fonction de recusiviter pour resoudre le soduku
-    public boolean jouer() {
+    public boolean jouer(int i,int j) {
         int indexNumTab =0;
         ArrayList<Integer> usedIndex = new ArrayList<Integer>();
         boolean valide = true;
@@ -31,9 +31,9 @@ public class Sudoku {
         }
 
         //Parcour des lignes
-        for(int i=0; i<9; i++){
+        for( i=0; i<9; i++){
             //Parcour des colonnes
-            for (int j=0; j<9; j++){
+            for ( j=0; j<9; j++){
                 if (jeu[i][j] == 0){
                     while (resolu == false && indexNumTab < 9) {
                         if (estLibre(i, j, getCarre(i, j), numerosTab[indexNumTab]) && !usedIndex.contains(indexNumTab)) {
@@ -41,7 +41,7 @@ public class Sudoku {
                             int indexCarre = getCarre(i,j);
                             listeCarre[indexCarre].chiffre.add(numerosTab[indexNumTab]);
                             usedIndex.add(indexNumTab);
-                            valide = jouer();
+                            valide = jouer(i,j);
                             //Si on trouve pas de solutions avec la valeur mise en place, on remet la valeur a zero et on reesaye avec d"autre
                             if (valide == false){
                                 jeu[i][j] = 0;
@@ -208,7 +208,7 @@ public class Sudoku {
         sudoku.lireFichier(file);
         //On appelle la methode pour resoudre le sudoku
         long startTime = System.currentTimeMillis();
-        boolean resolution = sudoku.jouer();
+        boolean resolution = sudoku.jouer(0,0);
         long stopTime = System.currentTimeMillis();
         long time = stopTime-startTime;
         if(resolution == true){
