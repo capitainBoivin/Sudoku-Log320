@@ -16,51 +16,8 @@ public class Sudoku {
     private Integer[] numerosTab = {1,2,3,4,5,6,7,8,9};
     private boolean resolu = false;
 
-    //Creer le jeu en assignant les valeurs pour les lignes et colonnes
-    public void creerJeu(Integer[][] jeu) {
-        int noDeLigne = 0;
-        int noDeColonne = 0;
-        //Construction des lignes, je pense
-        for (noDeLigne = 0; noDeLigne < 9; noDeLigne++) {
-            Ligne ligne = new Ligne();
-            for (noDeColonne = 0; noDeColonne < 9; noDeColonne++) {
-                ligne.chiffre.add(jeu[noDeLigne][noDeColonne]);
-            }
-            this.listeLigne[noDeLigne] = ligne;
-        }
 
-        //Construction des colonnes, je pense
-        for (noDeColonne = 0; noDeColonne < 9; noDeColonne++) {
-            Colonne colonne = new Colonne();
-            for (noDeLigne = 0; noDeLigne < 9; noDeLigne++) {
-                colonne.chiffre.add(jeu[noDeLigne][noDeColonne]);
-            }
-            this.listeColonne[noDeColonne] = colonne;
-        }
 
-        //Construction carre, elle pense (haha tres tres  drole marc andre majeau
-        construireCarre(0, 0, 0);
-        construireCarre(0, 3, 1);
-        construireCarre(0, 6, 2);
-        construireCarre(3, 0, 3);
-        construireCarre(3, 3, 4);
-        construireCarre(3, 6, 5);
-        construireCarre(6, 0, 6);
-        construireCarre(6, 3, 7);
-        construireCarre(6, 6, 8);
-    }
-
-    //Remplir les sections avec les numeros contenu dans la section
-    public void construireCarre(int ligne, int colonne, int index) {
-
-        Carre carre = new Carre();
-        for (int i = ligne; i < ligne + 3; i++) {
-            for (int j = colonne; j < colonne + 3; j++) {
-                carre.chiffre.add(jeu[i][j]);
-            }
-        }
-        this.listeCarre[index] = carre;
-    }
     //==============================================================================================================
     //------------------------------------------------------JEU-----------------------------------------------------
     //==============================================================================================================
@@ -155,7 +112,7 @@ public class Sudoku {
     public boolean estLibre(int ligne, int colonne, int carre,int num) {
         boolean libre = true;
         if (listeColonne[colonne].chiffre.contains(num)){
-           libre = false;
+            libre = false;
         }
         if (listeLigne[ligne].chiffre.contains(num)){
             libre = false;
@@ -166,24 +123,66 @@ public class Sudoku {
         return libre;
     }
 
+    //Ajout Marc...Remplie les listes avec des objets vides
+    public void creerObjets()
+    {
+        for (int i=0; i<9;i++)
+        {
+            this.listeLigne[i]=new Ligne();
+            this.listeColonne[i]=new Colonne();
+            this.listeCarre[i]=new Carre();
+        }
+
+    }
+
     //Cette fonction permet de lire le fichier avant la creation du jeu
     public void lireFichier(File f)
     {
         String ligne;
         int noDeLigne = 0;
+        int indexCarre=0;
         //Lire le fichier
         try  {
             BufferedReader br = new BufferedReader(new FileReader(f));
             //Pour chaque ligne on lit la ligne et remplit chaque colonne avec les caracteres, on augmente ensuite noDeLigne pour remplir la ligne suivante
             while ((ligne = br.readLine()) != null) {
                 int i=0;
+
                 for(char no:ligne.toCharArray()){
                     jeu[noDeLigne][i] = Character.getNumericValue(no);
+
+                    //Ajout marc...ajout des chiffres dans les ligne
+                    listeLigne[noDeLigne].chiffre.add(Character.getNumericValue(no));
+                    listeColonne[i].chiffre.add(Character.getNumericValue(no));
+
+                    if(noDeLigne>=3 && noDeLigne<6)
+                    {
+                        indexCarre=3;
+                    }
+                    else if (noDeLigne>=6 && noDeLigne<9)
+                    {
+                        indexCarre=6;
+                    }
+
+                    //Ajout marc
+                    if(i<3)
+                    {
+                        this.listeCarre[indexCarre].chiffre.add(Character.getNumericValue(no));
+                    }
+                    else if(i<6)
+                    {
+                        this.listeCarre[indexCarre+1].chiffre.add(Character.getNumericValue(no));
+                    }
+                    else
+                    {
+                        this.listeCarre[indexCarre+2].chiffre.add(Character.getNumericValue(no));
+                    }
                     i++;
                 }
                 noDeLigne++;
             }
-            this.creerJeu(jeu);
+
+
         }
         catch (Exception e){
             //System.out.println(e.getMessage());
@@ -206,6 +205,7 @@ public class Sudoku {
 
     public static void main(String[] args) {
         Sudoku sudoku=new Sudoku();
+        sudoku.creerObjets();
         //Entrer le fichier dans la console
         Scanner scanner = new Scanner(System.in);
         System.out.println("Veuillez entrer le path contenant le fichier de jeu :");
@@ -219,7 +219,7 @@ public class Sudoku {
         long stopTime = System.currentTimeMillis();
         long time = stopTime-startTime;
         if(resolution == true){
-            System.out.println("Le sudoku est resolu en " + time + " ms");
+            System.out.println("Le sudoku est resolu en " + (time/1000.0) % 100 + "s");
             sudoku.voirJeu();
         }
         else {
