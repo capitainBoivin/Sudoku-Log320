@@ -65,14 +65,16 @@ public class Sudoku {
     //------------------------------------------------------JEU-----------------------------------------------------
     //==============================================================================================================
 
+    //Fonction de recusiviter pour resoudre le soduku
     public boolean jouer() {
         int indexNumTab =0;
-        ArrayList<Integer> usedIndex = new ArrayList<>();
+        ArrayList<Integer> usedIndex = new ArrayList<Integer>();
         boolean valide = true;
         //Si le jeu est resolu ou on as tous essaye les numeros dla table
         if(resolu == true || indexNumTab >= 9){
             return true;
         }
+
         //Parcour des lignes
         for(int i=0; i<9; i++){
             //Parcour des colonnes
@@ -116,6 +118,7 @@ public class Sudoku {
         }
     }
 
+    //Verifier si la valeur se trouve dans un carre de jeu
     public int getCarre(int ligne, int colonne){
         int indexCarre = 10;
         if (ligne < 3 && colonne < 3){
@@ -188,17 +191,17 @@ public class Sudoku {
     }
 
 
+    //Permet d'afficher le jeu a la fin du jeu
     public void voirJeu()
     {
-
         for(int i = 0; i < 9; i++) {
-            System.out.println("ligne"+i);
+            StringBuilder ligne=new StringBuilder();
             for(int j = 0; j < 9; j++) {
-                System.out.println(this.jeu[i][j]);
+                ligne.append(this.jeu[i][j]);
             }
+            System.out.println(ligne);
         }
     }
-
 
 
     public static void main(String[] args) {
@@ -217,6 +220,7 @@ public class Sudoku {
         long time = stopTime-startTime;
         if(resolution == true){
             System.out.println("Le sudoku est resolu en " + time + " ms");
+            sudoku.voirJeu();
         }
         else {
             System.out.println("Le sudoku na pas de solution");
