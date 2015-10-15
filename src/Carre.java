@@ -5,6 +5,6 @@ import java.util.ArrayList;
  */
 public class Carre {
 
+    //Liste contenant les chiffres qui sont dans la case
     public ArrayList<Integer> chiffre = new ArrayList<Integer>();
-
 }

@@ -7,14 +7,13 @@ import java.util.Scanner;
 /**
  * Created by Catherine on 9/30/2015.
  */
+//Creer la classe Sudoku
 public class Sudoku {
 
     protected Integer[][] jeu = new Integer[9][9];
     private Carre[] listeCarre = new Carre[9];
     private Integer[] numerosTab = {1,2,3,4,5,6,7,8,9};
     private boolean resolu = false;
-
-
 
     //==============================================================================================================
     //------------------------------------------------------JEU-----------------------------------------------------
@@ -102,7 +101,7 @@ public class Sudoku {
         return indexCarre;
     }
 
-    //Verifie si la case es libre
+    //Verifie si la case est libre
     public boolean estLibre(int ligne, int colonne, int carre,int num) {
         boolean libre = true;
         for (int i=0; i<9; i++){
@@ -121,14 +120,13 @@ public class Sudoku {
         return libre;
     }
 
-    //Ajout Marc...Remplie les listes avec des objets vides
+    //Remplie les listes avec des objets vides pour faire moins de boucles
     public void creerObjets()
     {
         for (int i=0; i<9;i++)
         {
             this.listeCarre[i]=new Carre();
         }
-
     }
 
     //Cette fonction permet de lire le fichier avant la creation du jeu
@@ -157,7 +155,7 @@ public class Sudoku {
                         indexCarre=6;
                     }
 
-                    //Ajout marc
+                    //Ajout dobjet vide, pour sauver des boucles
                     if(i<3)
                     {
                         this.listeCarre[indexCarre].chiffre.add(Character.getNumericValue(no));
@@ -174,14 +172,11 @@ public class Sudoku {
                 }
                 noDeLigne++;
             }
-
-
         }
         catch (Exception e){
             //System.out.println(e.getMessage());
         }
     }
-
 
     //Permet d'afficher le jeu a la fin du jeu
     public void voirJeu()
@@ -194,7 +189,6 @@ public class Sudoku {
             System.out.println(ligne);
         }
     }
-
 
     public static void main(String[] args) {
         Sudoku sudoku=new Sudoku();
